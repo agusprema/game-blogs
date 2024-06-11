@@ -1,0 +1,17 @@
+{
+    "name": "agusprema/framework",
+    "description": "For My Work Home",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "Handler\\": "handler/",
+            "Repository\\": "repository/"
+        }
+    },
+    "authors": [{
+        "name": "agusprema"
+    }],
+    "minimum-stability": "stable",
+    "require": {}
+}

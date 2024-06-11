@@ -1,0 +1,93 @@
+###Home Work Framework
+
+Featur Yang ada di framework ini
+
+create by : agusprema@gmail.com
+
+- [x] Query Builder
+- [x] Middleware
+- [x] Authetication
+- [x] Validator
+- [x] Route
+- [x] Migration
+- [x] Seeding
+
+
+###QueryBuilder
+
+```php
+
+use Core\Query\QueryBuilder;
+
+public static function findUserByUsername($username){
+$queryBuilder = new QueryBuilder();
+$query = $queryBuilder->table('users')
+->select('*')
+->where('username', '=', $username)
+->first();
+
+return $query;
+}
+
+//Sample for query
+$queryBuilder = new QueryBuilder();
+
+$query = $queryBuilder->table('users')
+->select('*')
+->where('username', '=', $username)
+->first();
+
+//sample for get all data
+$query = $queryBuilder->table('users')
+->select('*')
+->build();
+
+
+// sample for create data
+
+$query = $queryBuilder->table('users')
+->create([
+'username' => $data['username'],
+'password' => password_hash($data['password'], PASSWORD_BCRYPT)
+])
+->build();
+
+
+// sample for update data
+
+$query = $queryBuilder->table('users')
+->create([
+'password' => password_hash($data['password'], PASSWORD_BCRYPT)
+])
+->where('id', '=', $id)
+->build();
+
+
+
+// sample for delete data
+
+
+$query = $queryBuilder->table('users')
+->delete()
+->where('id', '=', $id)
+->build();
+
+
+
+```
+
+###Validator
+
+| validator | variable | usage |
+|:-----|:--------:|------:|
+| required | required | FormValidator::validate('field', 'required'); |
+| unique | required | FormValidator::validate('field.table.column', 'unique'); |
+| email | email | FormValidator::validate('field', 'email'); |
+
+```php
+
+use Core\Validator\FormValidator;
+
+FormValidator::validate('username.users.username', 'required|unique');
+
+```
