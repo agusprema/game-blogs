@@ -1,3 +1,9 @@
+<?php 
+
+    $categorys = \Repository\Category::getAllCategoryLimit(2);
+
+?>
+
 <nav class="navbar navbar-expand-lg">
     <!-- header bottom -->
     <div class="header-bottom  w-100">
@@ -7,34 +13,21 @@
                 <div class="collapse navbar-collapse flex-grow-1">
                     <!-- menus -->
                     <ul class="navbar-nav">
-                        <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle" href="index.html">Home</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="index.html">Magazine</a></li>
-                                <li><a class="dropdown-item" href="personal.html">Personal</a></li>
-                                <li><a class="dropdown-item" href="personal-alt.html">Personal Alt</a></li>
-                                <li><a class="dropdown-item" href="minimal.html">Minimal</a></li>
-                                <li><a class="dropdown-item" href="classic.html">Classic</a></li>
-                            </ul>
+                        <li class="nav-item <?= is_route('/', '', 'active') ?>">
+                            <a class="nav-link" href="<?= url('/') ?>">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category.html">Lifestyle</a>
+                        
+                        <?php foreach($categorys as $category) : ?>
+                            <li class="nav-item <?= is_route('/category/'.$category->slug, '', 'active') ?>">
+                                <a class="nav-link" href="<?= url('/category/'.$category->slug) ?>"><?= $category->title ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                        <li class="nav-item <?= is_route('/category', '', 'active') ?>">
+                            <a class="nav-link" href="<?= url('/category') ?>">Category</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category.html">Inspiration</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#">Pages</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="category.html">Category</a></li>
-                                <li><a class="dropdown-item" href="blog-single.html">Blog Single</a></li>
-                                <li><a class="dropdown-item" href="blog-single-alt.html">Blog Single Alt</a></li>
-                                <li><a class="dropdown-item" href="about.html">About</a></li>
-                                <li><a class="dropdown-item" href="contact.html">Contact</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="contact.html">Contact</a>
+
+                        <li class="nav-item <?= is_route('/tag', '', 'active') ?>">
+                            <a class="nav-link" href="<?= url('/tag') ?>">Tag</a>
                         </li>
                     </ul>
                 </div>

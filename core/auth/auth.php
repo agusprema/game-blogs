@@ -24,8 +24,14 @@ class Auth {
         return redirect('/');
     }
 
-    public static function user(){
-        return Users::findUserByID($_SESSION['auth']);
+    public static function user($id = ''){
+        $userID = !empty($id) ? $id : (isset($_SESSION['auth']) ? $_SESSION['auth'] : null);
+
+        if ($userID) {
+            return Users::findUserByID($userID);
+        }
+
+        return null;
     }
 
     public static function check_role($role){

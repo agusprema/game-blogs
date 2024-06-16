@@ -1,39 +1,43 @@
 <!-- post -->
 <div class="post post-classic rounded bordered">
     <div class="thumb top-rounded">
-        <a href="category.html" class="category-badge lg position-absolute">Inspiration</a>
-        <a href="blog-single.html">
+        <a href="<?= url('/category/'. getCategory($post['post_id'])->slug) ?>" class="category-badge lg position-absolute"><?= getCategory($post['post_id'])->title ?></a>
+        <a href="<?= url('/blog/'. $post['slug']) ?>">
             <div class="inner">
-                <img src="images/posts/post-lg-2.jpg" alt="post-title" />
+                <img src="<?= url('/'. $post['thumbnail']) ?>" alt="post-title" />
             </div>
         </a>
     </div>
     <div class="details">
         <ul class="meta list-inline mb-0">
-            <li class="list-inline-item"><a href="#"><img src="images/other/author-sm.png" class="author" alt="author"/>Katen Doe</a></li>
-            <li class="list-inline-item">29 March 2021</li>
-            <li class="list-inline-item"><i class="icon-bubble"></i> (0)</li>
+            <li class="list-inline-item">
+                <img src="<?= user($post['user_id'])->profile ?>" style="width:30px;height:30px;" class="author rounded-circle" alt="author"/>
+                <?= user($post['user_id'])->name ?>
+            </li>
+            <li class="list-inline-item"><?= date("F jS, Y", strtotime($post['updated_at'])) ?></li>
         </ul>
-        <h5 class="post-title mb-3 mt-3"><a href="blog-single.html">10 Ways To Immediately Start Selling Furniture</a></h5>
-        <p class="excerpt mb-0">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+        <h5 class="post-title mb-3 mt-3"><a href="<?= url('/blog/'. $post['slug']) ?>"><?= $post['title'] ?></a></h5>
+        <p class="excerpt summary mb-0"><?= fully_decode_html_entities($post['summary']) ?></p>
     </div>
     <div class="post-bottom clearfix d-flex align-items-center">
         <div class="social-share me-auto">
-            <button class="toggle-button icon-share"></button>
+            <button class="toggle-button icon-tag"></button>
             <ul class="icons list-unstyled list-inline mb-0">
-                <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="far fa-envelope"></i></a></li>
+                <?php 
+                    $tag = \Repository\tag::getTagPostByPostId($post['post_id']);
+                    $tags = \Repository\tag::getTagByPostTagId(parseObject($tag, 'tag_id'));
+                    ?>
+
+                <?php foreach($tags as $tag) : ?>
+                    <li class="list-inline-item"><a href="<?= url('/tag/'. $tag->slug) ?>" class="tag">#<?= $tag->title ?></a></li>
+                <?php endforeach; ?>
             </ul>
         </div>
         <div class="float-end d-none d-md-block">
-            <a href="blog-single.html" class="more-link">Continue reading<i class="icon-arrow-right"></i></a>
+            <a href="<?= url('/blog/'. $post['slug']) ?>" class="more-link">Continue reading<i class="icon-arrow-right"></i></a>
         </div>
         <div class="more-button d-block d-md-none float-end">
-            <a href="blog-single.html"><span class="icon-options"></span></a>
+            <a href="<?= url('/blog/'. $post['slug']) ?>"><span class="icon-options"></span></a>
         </div>
     </div>
 </div>

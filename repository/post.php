@@ -13,23 +13,69 @@ class Post{
                                 'title' => $data['title'],
                                 'slug' => $data['slug'],
                                 'summary' => $data['summary'],
+                                'thumbnail' => $data['thumbnail'],
                                 'content' => isset($data['content']) ? $data['content'] : null
                             ])
                             ->build();
         return $query;
     }
 
+    public static function getPostBySlug($slug){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('posts')
+                            ->select("*")
+                            ->where('slug', '=', $slug)
+                            ->first();
+        return $query;
+    }
+
+    public static function getPostByTag($tag, $page){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('posts')
+                            ->select("*")
+                            ->orderBy('updated_at', 'DESC')
+                            ->whereIn('post_id', $tag)
+                            ->paginate(10, $page);
+        return $query;
+    }
+
+    public static function getPostByCategory($category, $page){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('posts')
+                            ->select("*")
+                            ->orderBy('updated_at', 'DESC')
+                            ->whereIn('post_id', $category)
+                            ->paginate(10, $page);
+        return $query;
+    }
+
     public static function updatePost($id,$data){
+        $datas = [
+            'title' => $data['title'],
+            'slug' => $data['slug'],
+            'summary' => $data['summary'],
+            'content' => isset($data['content']) ? $data['content'] : null
+        ];
+        
+        if(isset($data['thumbnail'])){
+            $datas['thumbnail'] = $data['thumbnail'];
+        }
 
         $queryBuilder = new QueryBuilder();
         $query = $queryBuilder->table('posts')
-                            ->update([
-                                'title' => $data['title'],
-                                'slug' => $data['slug'],
-                                'content' => isset($data['content']) ? $data['content'] : null
-                            ])
+                            ->update($datas)
                             ->where('Post_id', '=', $id)
                             ->build();
+        return $query;
+    }
+
+    public static function getPosts($search = '', $page = 1){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('posts')
+                            ->select('*')
+                            ->orderBy('updated_at', 'DESC')
+                            ->where('title', 'LIKE', '%'.$search.'%')
+                            ->paginate(5, $page);
         return $query;
     }
 

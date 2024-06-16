@@ -1,7 +1,7 @@
 <?php
 namespace Core\Editor;
 
-class EditorJSToHTML {
+class Parser {
     public function convert($editorData) {
         $html = '';
 
@@ -54,11 +54,11 @@ class EditorJSToHTML {
     }
 
     private function convertParagraph($data) {
-        return '<p class="mb-3">' . htmlspecialchars($data['text']) . '</p>';
+        return '<p class="mb-3">' . $data['text'] . '</p>';
     }
 
     private function convertHeader($data) {
-        return '<h' . $data['level'] . ' class="mt-4">' . htmlspecialchars($data['text']) . '</h' . $data['level'] . '>';
+        return '<h' . $data['level'] . ' class="mt-4">' . $data['text'] . '</h' . $data['level'] . '>';
     }
 
     private function convertList($data) {
@@ -68,7 +68,7 @@ class EditorJSToHTML {
             if (is_array($item)) {
                 $html .= '<li>' . $this->convertList(['style' => $data['style'], 'items' => $item['items']]) . '</li>';
             } else {
-                $html .= '<li>' . htmlspecialchars($item) . '</li>';
+                $html .= '<li>' . $item . '</li>';
             }
         }
         $html .= '</' . $listTag . '>';

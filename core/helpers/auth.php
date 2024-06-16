@@ -2,8 +2,14 @@
 use Repository\Users;
 
 if(!function_exists('user')){
-    function user(){
-        return Users::findUserByID($_SESSION['auth']);
+    function user($id = ''){
+        $userID = !empty($id) ? $id : (isset($_SESSION['auth']) ? $_SESSION['auth'] : null);
+
+        if ($userID) {
+            return Users::findUserByID($userID);
+        }
+
+        return null;
     }
 }
 

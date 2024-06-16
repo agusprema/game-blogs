@@ -54,7 +54,7 @@ class QueryBuilder
 
     public function orderBy($field, $direction = 'ASC')
     {
-        $this->orderBy = [$field, $direction];
+        $this->orderBy = array($field, $direction);
         return $this;
     }
 
@@ -108,23 +108,37 @@ class QueryBuilder
 
      public function paginate($perPage, $currentPage)
     {
+        $queryAll = $this->buildSelectQuery();
+        $resultAll =  $this->conn->query($queryAll);
+        
         $this->limit = $perPage;
         $this->offset = ($currentPage - 1) * $perPage;
 
         $query = $this->buildSelectQuery();
-        $result =  mysqli_query($this->conn, $query);
+        $result =  $this->conn->query($query);
 
-        if (!$result) {
-            die('Query Error: ' . mysqli_error($this->conn));
+        if (!$result and  !$resultAll) {
+            die('Query Error: ' . $this->conn->error);
         }
 
-        $this->countData = mysqli_num_rows($result);
+        $this->countData = mysqli_num_rows($resultAll);
 
         if ($this->countData == 0) {
             return null;
         }
 
         return new QueryResultPaginate($this->get($result), $this->countData, $perPage, $currentPage);
+    }
+
+    public function count(){
+        $query = $this->buildSelectQuery(); 
+        $result =  mysqli_query($this->conn, $query);
+
+        if (!$result) {
+            die('Query Error: ' . mysqli_error($this->conn));
+        }
+
+        return mysqli_num_rows($result);
     }
 
     public function first()
@@ -179,18 +193,18 @@ class QueryBuilder
             foreach ($this->conditions as $condition) {
                 if ($condition[1] === 'IN') {
                     $values = implode(', ', array_map(function ($value) {
-                        return "'" . mysqli_real_escape_string($this->conn, $value) . "'";
+                        return "'" . $this->conn->real_escape_string($value) . "'";
                     }, $condition[2]));
                     $query .= "$condition[0] IN ($values) AND ";
                 } else {
-                    $query .= "$condition[0] $condition[1] '" . mysqli_real_escape_string($this->conn, $condition[2]) . "' AND ";
+                    $query .= "$condition[0] $condition[1] '" . $this->conn->real_escape_string($condition[2]) . "' AND ";
                 }
             }
             $query = rtrim($query, " AND ");
         }
 
         if (!empty($this->orderBy)) {
-            $query .= " ORDER BY $this->orderBy[0] $this->orderBy[1]";
+            $query .= " ORDER BY ".$this->orderBy[0]." ".$this->orderBy[1];
         }
 
         if (!empty($this->limit)) {
@@ -210,6 +224,7 @@ class QueryBuilder
 
         $fields = implode(', ', array_keys($this->data));
         $values = "'" . implode("', '", array_values($this->data)) . "'";
+        
         $query = "INSERT INTO $this->table ($fields) VALUES ($values)";
 
         $result = $this->conn->query($query);
@@ -241,11 +256,11 @@ class QueryBuilder
             foreach ($this->conditions as $condition) {
                 if ($condition[1] === 'IN') {
                     $values = implode(', ', array_map(function ($value) {
-                        return "'" . mysqli_real_escape_string($this->conn, $value) . "'";
+                        return "'" . $this->conn->real_escape_string($value) . "'";
                     }, $condition[2]));
                     $query .= "$condition[0] IN ($values) AND ";
                 } else {
-                    $query .= "$condition[0] $condition[1] '" . mysqli_real_escape_string($this->conn, $condition[2]) . "' AND ";
+                    $query .= "$condition[0] $condition[1] '" . $this->conn->real_escape_string($condition[2]) . "' AND ";
                 }
             }
             $query = rtrim($query, " AND ");
@@ -269,11 +284,11 @@ class QueryBuilder
             foreach ($this->conditions as $condition) {
                 if ($condition[1] === 'IN') {
                     $values = implode(', ', array_map(function ($value) {
-                        return "'" . mysqli_real_escape_string($this->conn, $value) . "'";
+                        return "'" . $this->conn->real_escape_string($value) . "'";
                     }, $condition[2]));
                     $query .= "$condition[0] IN ($values) AND ";
                 } else {
-                    $query .= "$condition[0] $condition[1] '" . mysqli_real_escape_string($this->conn, $condition[2]) . "' AND ";
+                    $query .= "$condition[0] $condition[1] '" . $this->conn->real_escape_string($condition[2]) . "' AND ";
                 }
             }
             $query = rtrim($query, " AND ");
@@ -307,6 +322,7 @@ class QueryBuilder
         }
 
         $data = [];
+        
         while ($row = mysqli_fetch_assoc($result)) {
             $data[] = $row;
         }

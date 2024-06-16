@@ -1,3 +1,9 @@
+<?php 
+
+    $categorys = \Repository\Category::getAllCategoryLimit(2);
+
+?>
+
 <!-- canvas menu -->
 <div class="canvas-menu d-flex align-items-end flex-column">
 	<!-- close button -->
@@ -5,35 +11,60 @@
 
 	<!-- logo -->
 	<div class="logo">
-		<img src="images/logo.svg" alt="Katen" />
+		<img src="<?= asset('img/logo.png') ?>" alt="Katen" />
 	</div>
 
 	<!-- menu -->
 	<nav>
 		<ul class="vertical-menu">
-			<li class="active">
-				<a href="index.html">Home</a>
-				<ul class="submenu">
-					<li><a href="index.html">Magazine</a></li>
-					<li><a href="personal.html">Personal</a></li>
-					<li><a href="personal-alt.html">Personal Alt</a></li>
-					<li><a href="minimal.html">Minimal</a></li>
-					<li><a href="classic.html">Classic</a></li>
-				</ul>
+			<li class="<?= is_route('/', '', 'active') ?>">
+				<a href="<?= url('/') ?>">Home</a>
 			</li>
-			<li><a href="category.html">Lifestyle</a></li>
-			<li><a href="category.html">Inspiration</a></li>
-			<li>
-				<a href="#">Pages</a>
-				<ul class="submenu">
-					<li><a href="category.html">Category</a></li>
-					<li><a href="blog-single.html">Blog Single</a></li>
-					<li><a href="blog-single-alt.html">Blog Single Alt</a></li>
-					<li><a href="about.html">About</a></li>
-					<li><a href="contact.html">Contact</a></li>
-				</ul>
+			
+			<?php foreach($categorys as $category) : ?>
+				<li class="<?= is_route('/category/'.$category->slug, '', 'active') ?>">
+					<a href="<?= url('/category/'.$category->slug) ?>"><?= $category->title ?></a>
+				</li>
+			<?php endforeach; ?>
+			<li class="<?= is_route('/category', '', 'active') ?>">
+				<a href="<?= url('/category') ?>">Category</a>
 			</li>
-			<li><a href="contact.html">Contact</a></li>
+
+			<li class="<?= is_route('/tag', '', 'active') ?>">
+				<a href="<?= url('/tag') ?>">Tag</a>
+			</li>
+
+			<?php if(check_auth()) : ?>
+				<li class="no-arrow">
+					<a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= user()->name ?></span>
+						<img style="width: 2rem; height: 2rem;" class="img-profile rounded-circle" src="<?= asset(user()->profile) ?>">
+					</a>
+					<!-- Dropdown - User Information -->
+					<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+						<a class="dropdown-item" href="<?= url('/user/profile') ?>">
+							<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+							Profile
+						</a>
+						<a class="dropdown-item" href="<?= url('/dashboard/content') ?>">
+							<i class="fab fa-blogger-b fa-sm fa-fw mr-2 text-gray-400"></i>
+							Create Content
+						</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="<?= url('/logout') ?>" data-toggle="modal" data-target="#logoutModal">
+							<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+							Logout
+						</a>
+					</div>
+				</li>
+			<?php else: ?>
+				<li>
+					<a href="<?= url('/login') ?>">Login</a>
+				</li>
+				<li>
+					<a href="<?= url('/register') ?>">Register</a>
+				</li>
+			<?php endif; ?>
 		</ul>
 	</nav>
 

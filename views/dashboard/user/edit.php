@@ -43,7 +43,7 @@
                 </form>
             </div>
             <div class="collapse mt-2" id="collapsePasswordUser">
-                <form action="<?= url('/dashboard/user/update?change=true&id='. $id) ?>" method="post">
+                <form action="<?= url('/dashboard/user/'. $id .'/update?change=true') ?>" method="post">
                     <div class="form-group">
                         <label for="inputNewPassword">New Password</label>
                         <input type="password" class="form-control" id="inputNewPassword" name="password">

@@ -227,7 +227,7 @@ $(function () {
   $('.post button.toggle-button').each(function () {
     $(this).on('click', function (e) {
       $(this).next('.social-share .icons').toggleClass("visible");
-      $(this).toggleClass('icon-close').toggleClass('icon-share');
+      $(this).toggleClass('icon-close').toggleClass('icon-tag');
     });
   });
 

@@ -1,11 +1,11 @@
 <?php
 return [
-    'app_name' => 'Blogs game',
+    'app_name' => 'Gameline',
     'database' => [
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'latihan',
+        'database' => 'gameline',
         'port' => 3306
     ],
     'base_url' => 'http://localhost:8000',

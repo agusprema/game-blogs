@@ -48,6 +48,42 @@ class Category{
         return $query;
     }
 
+    public static function getAllCategoryLimit($limit){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('categorys')
+                            ->select('*')
+                            ->limit($limit)
+                            ->build();
+        return $query;
+    }
+
+    public static function getCategoryBySlug($slug){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('categorys')
+                            ->select('*')
+                            ->where('slug', '=', $slug)
+                            ->first();
+        return $query;
+    }
+
+    public static function getCategoryPostByCategoryId($id){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('post_categorys')
+                            ->select('*')
+                            ->where('category_id', '=', $id)
+                            ->build();
+        return $query;
+    }
+
+    public static function getCategoryPostById($id){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('post_categorys')
+                            ->select('*')
+                            ->where('category_id', '=', $id)
+                            ->count();
+        return $query;
+    }
+
     public static function addCategoryToPost($data){
         $queryBuilder = new QueryBuilder(false);
         $query = $queryBuilder->table('post_categorys')
@@ -62,23 +98,35 @@ class Category{
     public static function getCategoryBytitle($values){
         $queryBuilder = new QueryBuilder();
         $query = $queryBuilder->table('categorys')
-                            ->select('category_id')
+                            ->select('*')
                             ->whereIn('title', $values)
                             ->build();
         return $query;
     }
 
-    public static function findCategoryToPost($id){
+    public static function findCategoryByPostIdToPost($id){
         $postToCategory = (new QueryBuilder())->table('post_categorys')
-                            ->select('category_id')
+                            ->select('*')
                             ->where('post_id', '=', $id)
                             ->build();
-        
-        $categorys = (new QueryBuilder())->table('categorys')
-                                    ->select('title')
+        $categorys = []; 
+
+        if((array)$postToCategory){
+            $categorys = (new QueryBuilder())->table('categorys')
+                                    ->select('*')
                                     ->whereIn('category_id',parseObject($postToCategory, 'category_id'))
-                                    ->build();
+                                    ->first();
+        }
+
         return $categorys;
+    }
+
+    public static function deleteCategoryByPostIdToPost($id){
+        $postToCategory = (new QueryBuilder())->table('post_categorys')
+                            ->delete()
+                            ->where('post_id', '=', $id)
+                            ->build();
+        return $postToCategory;
     }
 
     public static function deleteCategory($id){

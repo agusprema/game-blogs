@@ -22,7 +22,7 @@ if(!function_exists('redirect')){
 if(!function_exists('is_route')){
     function is_route($urls,$not_active = false, $active = true){
         foreach((array) $urls as $key => $value) {
-            if($value == $_SERVER['PATH_INFO']){
+            if($value == $_SERVER['REQUEST_URI']){
                 return $active;
             }
         }

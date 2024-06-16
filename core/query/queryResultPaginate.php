@@ -12,9 +12,9 @@ class queryResultPaginate
 
     public function __construct($data, $count, $perPage = 0, $currentPage = 0)
     {
-        $this->data = array_map(function($item) {
-            return new QueryResultItem($item);
-        }, $data);
+        
+        $this->data = $data;
+        
         $this->count = $count;
         $this->perPage = $perPage;
         $this->currentPage = $currentPage;

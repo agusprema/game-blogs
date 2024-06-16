@@ -68,8 +68,9 @@ function createPosts($db)
         `user_id` BIGINT unsigned NOT NULL,
         `title` VARCHAR(75) NOT NULL,
         `slug` VARCHAR(100) NOT NULL,
-        `summary` TINYTEXT NULL,
-        `content` TEXT NULL DEFAULT NULL,
+        `summary` MEDIUMTEXT NULL,
+        `thumbnail` VARCHAR(255) NOT NULL,
+        `content` LONGTEXT NULL DEFAULT NULL,
         `created_at` timestamp NULL DEFAULT NULL,
         `updated_at` timestamp NULL DEFAULT NULL,
         PRIMARY KEY (`post_id`),
@@ -171,7 +172,7 @@ function createPostTag($db)
 
 createDB();
 $db = dbCOn();
-//createUsers($db);
+createUsers($db);
 createPosts($db);
 createCategory($db);
 createPostCategory($db);

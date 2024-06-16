@@ -7,11 +7,11 @@ function dd($d)
     exit();
 }
 
-function fully_decode_html_entities($data) {
+function fully_decode_html_entities($data, $ent = ENT_QUOTES | ENT_HTML5) {
     $previous_data = '';
     while ($data !== $previous_data) {
         $previous_data = $data;
-        $data = html_entity_decode($data, ENT_QUOTES | ENT_HTML5);
+        $data = html_entity_decode($data, $ent);
     }
     return $data;
 }

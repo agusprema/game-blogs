@@ -1,8 +1,12 @@
 <?php
 
 return [
-    ["GET /", "Home@index" ,"auth"],
-    ["GET /blog/:slug", "Home@test" ,"auth"],
+    ["GET /", "Home@index"],
+    ["GET /blog/:slug", "Home@blog"],
+    ["GET /category", "Home@categoryList"],
+    ["GET /tag", "Home@tagList"],
+    ["GET /category/:slug", "Home@category"],
+    ["GET /tag/:slug", "Home@tag"],
 
 
 
@@ -52,4 +56,8 @@ return [
     ["GET /logout", "Auth@logoutPage" ,"auth"],
     ["GET /register", "Auth@register" ,"guest"],
     ["POST /register", "Auth@storeRegister" ,"guest"],
+    ["GET /user/profile", "Auth@profile", "auth"],
+    ["POST /user/profile/profile", "Auth@updateProfile", "auth"],
+    ["POST /user/profile/data", "Auth@dataProfile", "auth"],
+    ["POST /user/profile/password", "Auth@password", "auth"],
 ];

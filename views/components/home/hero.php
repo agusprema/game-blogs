@@ -1,7 +1,7 @@
-<section class="hero-carousel">
+<!-- <section class="hero-carousel">
     <div class="container-xl">
         <div class="post-carousel-lg">
-            <!-- post -->
+
             <div class="post featured-post-xl">
                 <div class="details clearfix">
                     <a href="category.html" class="category-badge lg">Lifestyle</a>
@@ -17,7 +17,7 @@
                     </div>
                 </a>
             </div>
-            <!-- post -->
+
             <div class="post featured-post-xl">
                 <div class="details clearfix">
                     <a href="category.html" class="category-badge lg">Culture</a>
@@ -36,3 +36,4 @@
         </div>
     </div>
 </section>
+ -->

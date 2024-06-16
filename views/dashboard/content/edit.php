@@ -18,7 +18,7 @@
                     <?= $_SESSION['error'] ?>
                 </div>
             <?php endif; ?>
-            <form action="<?= url('/dashboard/content') ?>" method="post" id="form">
+            <form action="<?= url('/dashboard/content/' . $post->post_id .'/update') ?>" method="post" id="form" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputtitle4">title</label>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputcategory">Category</label>
-                        <input name="categorys" id="inputcategory" value="<?= implode(',', parseObject($categoryToPost, 'title')) ?>">
+                        <input name="categorys" id="inputcategory" value="<?= $categoryToPost->title ?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -44,10 +44,15 @@
                     <textarea class="form-control" name="summary" id="inputsummary" cols="5"><?= $post->summary ?></textarea>
                 </div>
                 <div class="form-group">
-                    <input type="hidden" id="formContent" name="content">
+                    <label for="formFile" class="form-label">Thumbnail</label>
+                    <img class="d-block border border-2 border-dark w-50 mx-auto" src="<?= url('/'.$post->thumbnail) ?>" alt="" srcset="">
+                    <input class="form-control" type="file" id="formFile" name="thumbnail">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" id="formContent" name="content" value='<?= $post->content ?>'>
                     <div id="editorjs" style="border: 1px solid #ddd; padding: 20px; border-radius: 5px;"></div>
                 </div>
-                <button type="submit" id="create" class="btn btn-primary">Create</button>
+                <button type="submit" id="update" class="btn btn-primary">Update</button>
             </form>
         </div>
     </div>
@@ -109,8 +114,12 @@
 
     const category = new Tagify(inputcategory, {
         ...configTag,
+        maxTags: 1,
         whitelist: <?= json_encode($categorys) ?>,
     });
+    
+
+    const jsonObject = decodeURIComponent(escape(window.atob(`<?= fully_decode_html_entities($post->content) ?>`)));
 
     const editor = new EditorJS({
         holder: 'editorjs',
@@ -193,10 +202,10 @@
             },
             embed: Embed
         },
-        data: <?= fully_decode_html_entities($post->content) ?>,
+        data : JSON.parse(jsonObject),
         onChange: (api, event) => {
             editor.save().then((outputData) => {
-                $('#formContent').val(JSON.stringify(outputData))
+                $('#formContent').val(btoa(unescape(encodeURIComponent(JSON.stringify(outputData)))))
             })
         }
     });

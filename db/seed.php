@@ -22,7 +22,7 @@ function seedUsers()
                                 'name'     => 'agus 2',
                                 'password' => '$2y$10$/sJmksqDk4dBYGO2Ka4UXu4xoBnwTQdeCfTXhLFQQup./7rK5hPhy',
                                 'profile'  => 'profile/avatar.png',
-                                'role'     => 'admin'
+                                'role'     => 'user'
                             ])
                             ->build();
 

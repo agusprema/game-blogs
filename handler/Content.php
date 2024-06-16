@@ -26,8 +26,12 @@ class Content {
         $tags = parseObject(Tag::getAllTag(), 'title');
         $post = Post::findPostById($id);
 
+        if($post->user_id !== user()->id){
+            redirect('/dashboard/content');
+        }
+
         $tagToPost = Tag::findTagToPost($id);
-        $categoryToPost = Category::findCategoryToPost($id);
+        $categoryToPost = Category::findCategoryByPostIdToPost($id);
 
         viewWithLayout('dashboard', 'dashboard/content/edit', ['categorys' => $categorys, 'tags' => $tags, 'post' => $post, 'tagToPost' => $tagToPost, 'categoryToPost' => $categoryToPost]);
     }
@@ -39,7 +43,7 @@ class Content {
         }, $cn);
     }
 
-    public function store(){
+    public function update($id){
         try {
             FormValidator::validate('title', 'required');
             FormValidator::validate('slug', 'required');
@@ -47,11 +51,71 @@ class Content {
             FormValidator::validate('content', 'required');
             FormValidator::validate('tags', 'required');
             FormValidator::validate('categorys', 'required');
+            if(!empty($_FILES['thumbnail']['name'])){
+                FormValidator::validate('thumbnail.image/jpeg,image/png,image/gif', 'file');
+            }
+            // If validation passes, process the form
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            return redirect('/dashboard/content/'. $id .'/edit');
+        }
+
+        $post = Post::findPostById($id);
+        if($post->user_id !== user()->id){
+            redirect('/dashboard/content');
+        }
+
+        if(!empty($_FILES['thumbnail']['name'])){
+            $_POST['thumbnail'] = (new Storage('content/thumbnail/'. user()->id))->saveData($_FILES['thumbnail']);
+        }
+        $contents = Post::updatePost($id, $_POST);
+
+        if(!isset($contents)){
+            $_SESSION['error'] = "gagal menambah data";
+            return redirect('/dashboard/content/'. $id .'/edit');
+        }
+        
+        $categorys = Category::getCategoryBytitle($this->textToJson($_POST['categorys']));
+        $tags = Tag::getTagBytitle($this->textToJson($_POST['tags']));
+
+        Category::deleteCategoryByPostIdToPost($id);
+        Tag::deleteTagToPost($id);
+
+        foreach($categorys as $category){
+            Category::addCategoryToPost([
+                                'post_id' => $id,
+                                'category_id' => $category->category_id
+            ]);
+            
+        }
+
+        foreach($tags as $tag){
+            Tag::addtagToPost([
+                            'post_id' => $id,
+                            'tag_id' => $tag->tag_id
+            ]);
+        }
+
+        return redirect('/dashboard/content');
+    }
+
+    public function store(){
+        
+        try {
+            FormValidator::validate('title', 'required');
+            FormValidator::validate('slug', 'required');
+            FormValidator::validate('summary', 'required');
+            FormValidator::validate('content', 'required');
+            FormValidator::validate('tags', 'required');
+            FormValidator::validate('categorys', 'required');
+            FormValidator::validate('thumbnail.image/jpeg,image/png,image/gif', 'file');
             // If validation passes, process the form
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
             return redirect('/dashboard/content/create');
         }
+
+        $_POST['thumbnail'] = (new Storage('content/thumbnail/'. user()->id))->saveData($_FILES['thumbnail']);
 
         $contents = Post::newPost($_POST);
 
@@ -98,7 +162,7 @@ class Content {
         );
 
         // Handle server-side processing
-        echo json_encode(DataTables::simple($_GET, 'posts', 'post_id', $columns));
+        echo json_encode(DataTables::complex($_GET, 'posts', 'post_id', $columns, 'user_id = '. user()->id));
     }
 
     public function uploadFile(){

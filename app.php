@@ -21,6 +21,7 @@ $helpers = [
     "/core/helpers/view.php",
     "/core/helpers/storage.php",
     "/core/helpers/auth.php",
+    "/core/helpers/misc.php",
     "/core/middleware/middleware.php",
 ];
 

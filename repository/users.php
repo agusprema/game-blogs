@@ -84,6 +84,18 @@ class Users{
         return $query;
     }
 
+    public static function updateProfileNameUserByID($id, $data){
+
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('users')
+                            ->update([
+                                'name'  => $data['name'],
+                            ])
+                            ->where('id', '=', $id)
+                            ->build();
+        return $query;
+    }
+
     public static function deleteUser($id){
         $queryBuilder = new QueryBuilder();
         $query = $queryBuilder->table('users')

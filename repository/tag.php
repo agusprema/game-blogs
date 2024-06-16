@@ -53,21 +53,69 @@ class tag{
 
     public static function findTagToPost($id){
         $postToTag = (new QueryBuilder())->table('post_tags')
-                            ->select('tag_id')
+                            ->select('*')
                             ->where('post_id', '=', $id)
                             ->build();
-        
-        $tags = (new QueryBuilder())->table('tags')
-                                    ->select('title')
+        $tags = [];
+
+        if((array) $postToTag){
+            $tags = (new QueryBuilder())->table('tags')
+                                    ->select('*')
                                     ->whereIn('tag_id',parseObject($postToTag, 'tag_id'))
                                     ->build();
+        }
+        
         return $tags;
+    }
+
+    public static function getTagBySlug($slug){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('tags')
+                            ->select('*')
+                            ->where('slug', '=', $slug)
+                            ->first();
+        return $query;
+    }
+
+    public static function getTagPostByTagId($id){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('post_tags')
+                            ->select('*')
+                            ->where('tag_id', '=', $id)
+                            ->build();
+        return $query;
+    }
+
+    public static function getTagPostByPostId($id){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('post_tags')
+                            ->select('*')
+                            ->where('post_id', '=', $id)
+                            ->build();
+        return $query;
+    }
+
+    public static function getTagByPostTagId($id){
+        $queryBuilder = new QueryBuilder();
+        $query = $queryBuilder->table('tags')
+                            ->select('*')
+                            ->whereIn('tag_id', $id)
+                            ->build();
+        return $query;
+    }
+
+    public static function deleteTagToPost($id){
+        $postToTag = (new QueryBuilder())->table('post_tags')
+                            ->delete()
+                            ->where('post_id', '=', $id)
+                            ->build();
+        return $postToTag;
     }
 
     public static function getTagBytitle($values){
         $queryBuilder = new QueryBuilder();
         $query = $queryBuilder->table('tags')
-                            ->select('tag_id')
+                            ->select('*')
                             ->whereIn('title', $values)
                             ->build();
         return $query;

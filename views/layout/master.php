@@ -2,10 +2,10 @@
 <html lang="en-US">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Katen - Minimal Blog & Magazine HTML Theme</title>
-	<meta name="description" content="Katen - Minimal Blog & Magazine HTML Theme">
+	<title><?= config('app_name') ?> | Magazine for Games</title>
+	<meta name="description" content="<?= config('app_name') ?> | Magazine for Games">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+	<link rel="shortcut icon" type="image/x-icon" href="<?= asset('/img/favicon.png') ?>">
 
 	<!-- STYLES -->
 	<!-- Custom fonts for this template-->
@@ -102,7 +102,7 @@
 				<div class="row d-flex align-items-center gy-4">
 					<!-- copyright text -->
 					<div class="col-md-4">
-						<span class="copyright">© 2021 Katen. Template by ThemeGer.</span>
+						<span class="copyright">© 2024 <?= config('app_name') ?>. Template by ThemeGer.</span>
 					</div>
 
 					<!-- social icons -->
@@ -138,14 +138,31 @@
 			<h3 class="mb-4 mt-0">Press ESC to close</h3>
 		</div>
 		<!-- form -->
-		<form class="d-flex search-form">
-			<input class="form-control me-2" type="search" placeholder="Search and press enter ..." aria-label="Search">
+		<form class="d-flex search-form" action="<?= url('/') ?>" method="get">
+			<input class="form-control me-2" type="search" name="s" placeholder="Search and press enter ..." aria-label="Search">
 			<button class="btn btn-default btn-lg" type="submit"><i class="icon-magnifier"></i></button>
 		</form>
 	</div>
 </div>
 
 <?= view('components/home/canvas-menu') ?>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+				<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+				<a class="btn btn-primary" href="<?= url('/logout') ?>">Logout</a>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- JAVA SCRIPTS -->
 <script src="<?= asset('vendor/jquery/jquery.min.js') ?>"></script>
