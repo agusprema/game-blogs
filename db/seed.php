@@ -6,8 +6,7 @@ function seedUsers()
 {
     //$2y$10$/sJmksqDk4dBYGO2Ka4UXu4xoBnwTQdeCfTXhLFQQup./7rK5hPhy // agus
 
-    $queryBuilder = new Core\Query\QueryBuilder();
-    $query = $queryBuilder->table('users')
+    $query = (new Core\Query\QueryBuilder())->table('users')
                             ->create([
                                 'email'    => 'agus@gmail.com',
                                 'name'     => 'agus',
@@ -16,7 +15,7 @@ function seedUsers()
                                 'role'     => 'admin'
                             ])
                             ->build();
-            $queryBuilder->table('users')
+            (new Core\Query\QueryBuilder())->table('users')
                             ->create([
                                 'email'    => 'sung@gmail.com', 
                                 'name'     => 'agus 2',
@@ -57,4 +56,29 @@ function seedCategory(){
     }
 }
 
+function seedTag(){
+   $db = (new \Core\DB\Connect())->toDB();
+   
+   $query = $db->query("INSERT INTO `tags` (`title`, `slug`, `content`, `created_at`, `updated_at`) VALUES
+    ('Top 10 Games of 2024', 'top-10-games-2024', 'A curated list of the top 10 games released in 2024, covering various genres and platforms.', '2024-01-10 14:32:00', '2024-01-10 14:32:00'),
+    ('Best RPGs to Play', 'best-rpgs-to-play', 'An extensive guide on the best role-playing games available across different consoles and PC.', '2024-02-15 09:21:00', '2024-02-15 09:21:00'),
+    ('Game Development Tips', 'game-development-tips', 'Tips and tricks for budding game developers to improve their game development skills.', '2024-03-22 11:45:00', '2024-03-22 11:45:00'),
+    ('Upcoming eSports Tournaments', 'upcoming-esports-tournaments', 'A schedule of the most anticipated eSports tournaments happening this year.', '2024-04-18 16:30:00', '2024-04-18 16:30:00'),
+    ('Retro Gaming Revival', 'retro-gaming-revival', 'Exploring the resurgence of retro games and why they are gaining popularity again.', '2024-05-05 12:00:00', '2024-05-05 12:00:00'),
+    ('VR Games to Watch', 'vr-games-to-watch', 'An overview of the most exciting virtual reality games set to release soon.', '2024-06-25 10:15:00', '2024-06-25 10:15:00'),
+    ('Indie Games Spotlight', 'indie-games-spotlight', 'Highlighting some of the best indie games that deserve your attention.', '2024-07-12 08:45:00', '2024-07-12 08:45:00'),
+    ('Mobile Gaming Trends', 'mobile-gaming-trends', 'Current trends in mobile gaming and predictions for the future.', '2024-08-19 14:20:00', '2024-08-19 14:20:00'),
+    ('Guide to Game Streaming', 'guide-to-game-streaming', 'Everything you need to know about game streaming, from platforms to equipment.', '2024-09-30 09:00:00', '2024-09-30 09:00:00'),
+    ('Top 5 Horror Games', 'top-5-horror-games', 'A list of the scariest horror games that will keep you up at night.', '2024-10-25 18:00:00', '2024-10-25 18:00:00');
+    ");
+
+    if ($query) {
+        echo "Seeding tags success" . PHP_EOL;
+    } else {
+        echo "Error seeding tags : " . PHP_EOL;
+    }
+}
+
 seedUsers();
+seedCategory();
+seedTag();

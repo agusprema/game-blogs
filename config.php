@@ -5,7 +5,7 @@ return [
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'latihan',
+        'database' => 'latihan3',
         'port' => 3306
     ],
     'base_url' => 'http://localhost:8000',

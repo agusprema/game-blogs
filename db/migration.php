@@ -4,10 +4,13 @@ require_once realpath(__DIR__ . '/../core/helpers/config.php');
 
 function createDB()
 {
+    $host = config('database.hostname');
+    $username = config('database.username');
+    $password = config('database.password');
+    $port = config('database.port');
     $db = config('database.database');
 
-    $conns = new Core\DB\Connect();
-    $conn = $conns->toDB();
+    $conn = mysqli_connect($host, $username, $password);
     
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
